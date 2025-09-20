@@ -1,57 +1,22 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { ColorPicker } from "@/components/ColorPicker";
-import { ThemePreview } from "@/components/ThemePreview";
-import { ExportOptions } from "@/components/ExportOptions";
-import { TypographyEditor } from "@/components/TypographyEditor";
-import { SpacingEditor } from "@/components/SpacingEditor";
-import { ThemePresets } from "@/components/ThemePresets";
 import { themeApi, exportApi, Theme } from "@/lib/api";
-import {
-  Palette,
-  Eye,
-  Download,
-  Plus,
-  Settings,
-  Copy,
-  Share2,
-  Github,
-  Sparkles,
-  RotateCcw,
-  Save,
-  Loader2,
-  ChevronDown,
-  ChevronRight,
-  Code,
-  Monitor,
-  Smartphone,
-  Tablet,
-  Sun,
-  Moon,
-  ArrowRight,
-  Check,
-  RefreshCw,
-  Wrench,
-} from "lucide-react";
 
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
+import { ThemeCustomizer } from "@/components/ThemeCustomizer";
+import { HeroSection } from "@/components/HeroSection";
+import { ThemeEditor } from "@/components/ThemeEditor";
 import ExamplesPage from "@/components/ExamplesPage";
 import FeaturesPage from "@/components/FeaturesPage";
 import PricingPage from "@/components/PricingPage";
 import RoadmapPage from "@/components/RoadmapPage";
 import FaqPage from "@/components/FaqPage";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Github } from "lucide-react";
+import { Share2 } from "lucide-react";
 
 export default function TweakcnClone() {
   const [theme, setTheme] = useState<Theme | null>(null);
@@ -77,30 +42,81 @@ export default function TweakcnClone() {
 
   useEffect(() => {
     if (theme) {
-      document.documentElement.style.setProperty('--background', theme.colors.background);
-      document.documentElement.style.setProperty('--foreground', theme.colors.foreground);
-      document.documentElement.style.setProperty('--primary', theme.colors.primary[500]);
-      document.documentElement.style.setProperty('--primary-foreground', theme.colors.primary.foreground);
-      document.documentElement.style.setProperty('--secondary', theme.colors.secondary[500]);
-      document.documentElement.style.setProperty('--secondary-foreground', theme.colors.secondary.foreground);
-      document.documentElement.style.setProperty('--accent', theme.colors.accent[500]);
-      document.documentElement.style.setProperty('--accent-foreground', theme.colors.accent.foreground);
-      document.documentElement.style.setProperty('--muted', theme.colors.muted[100]);
-      document.documentElement.style.setProperty('--muted-foreground', theme.colors.muted.foreground);
-      document.documentElement.style.setProperty('--border', theme.colors.border);
-      document.documentElement.style.setProperty('--input', theme.colors.input);
-      document.documentElement.style.setProperty('--ring', theme.colors.ring);
+      document.documentElement.style.setProperty(
+        "--background",
+        theme.colors.background
+      );
+      document.documentElement.style.setProperty(
+        "--foreground",
+        theme.colors.foreground
+      );
+      document.documentElement.style.setProperty(
+        "--primary",
+        theme.colors.primary[500]
+      );
+      document.documentElement.style.setProperty(
+        "--primary-foreground",
+        theme.colors.primary.foreground
+      );
+      document.documentElement.style.setProperty(
+        "--secondary",
+        theme.colors.secondary[500]
+      );
+      document.documentElement.style.setProperty(
+        "--secondary-foreground",
+        theme.colors.secondary.foreground
+      );
+      document.documentElement.style.setProperty(
+        "--accent",
+        theme.colors.accent[500]
+      );
+      document.documentElement.style.setProperty(
+        "--accent-foreground",
+        theme.colors.accent.foreground
+      );
+      document.documentElement.style.setProperty(
+        "--muted",
+        theme.colors.muted[100]
+      );
+      document.documentElement.style.setProperty(
+        "--muted-foreground",
+        theme.colors.muted.foreground
+      );
+      document.documentElement.style.setProperty(
+        "--border",
+        theme.colors.border
+      );
+      document.documentElement.style.setProperty("--input", theme.colors.input);
+      document.documentElement.style.setProperty("--ring", theme.colors.ring);
       if (theme.colors.card) {
-        document.documentElement.style.setProperty('--card', theme.colors.card.DEFAULT);
-        document.documentElement.style.setProperty('--card-foreground', theme.colors.card.foreground);
+        document.documentElement.style.setProperty(
+          "--card",
+          theme.colors.card.DEFAULT
+        );
+        document.documentElement.style.setProperty(
+          "--card-foreground",
+          theme.colors.card.foreground
+        );
       }
       if (theme.colors.popover) {
-        document.documentElement.style.setProperty('--popover', theme.colors.popover.DEFAULT);
-        document.documentElement.style.setProperty('--popover-foreground', theme.colors.popover.foreground);
+        document.documentElement.style.setProperty(
+          "--popover",
+          theme.colors.popover.DEFAULT
+        );
+        document.documentElement.style.setProperty(
+          "--popover-foreground",
+          theme.colors.popover.foreground
+        );
       }
       if (theme.colors.destructive) {
-        document.documentElement.style.setProperty('--destructive', theme.colors.destructive.DEFAULT);
-        document.documentElement.style.setProperty('--destructive-foreground', theme.colors.destructive.foreground);
+        document.documentElement.style.setProperty(
+          "--destructive",
+          theme.colors.destructive.DEFAULT
+        );
+        document.documentElement.style.setProperty(
+          "--destructive-foreground",
+          theme.colors.destructive.foreground
+        );
       }
     }
   }, [theme]);
@@ -183,7 +199,10 @@ export default function TweakcnClone() {
           tailwind: tailwindResponse.content,
         }));
       } else {
-        console.error("Failed to generate Tailwind config: No content received.", tailwindResponse);
+        console.error(
+          "Failed to generate Tailwind config: No content received.",
+          tailwindResponse
+        );
       }
 
       // Generate CSS variables
@@ -194,7 +213,10 @@ export default function TweakcnClone() {
           css: cssResponse.content,
         }));
       } else {
-        console.error("Failed to generate CSS variables: No content received.", cssResponse);
+        console.error(
+          "Failed to generate CSS variables: No content received.",
+          cssResponse
+        );
       }
 
       // Generate JSON tokens
@@ -205,7 +227,10 @@ export default function TweakcnClone() {
           json: jsonResponse.content,
         }));
       } else {
-        console.error("Failed to generate JSON tokens: No content received.", jsonResponse);
+        console.error(
+          "Failed to generate JSON tokens: No content received.",
+          jsonResponse
+        );
       }
     } catch (error) {
       console.error("Failed to generate code:", error);
@@ -219,414 +244,40 @@ export default function TweakcnClone() {
     }
   }, [theme?.id]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading Tintly...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!theme) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">Failed to load theme</p>
-          <Button onClick={loadDefaultTheme}>Try Again</Button>
-        </div>
-      </div>
-    );
-  }
-
   const scrollToEditor = () => {
     editorRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
-      {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Wrench className="h-4 w-4 text-primary-foreground" />
-                </div>
-                <span className="text-xl font-bold">tintly</span>
-              </div>
-              <nav className="hidden md:flex gap-6 ml-8">
-                <a
-                  href="#examples"
-                  className="text-sm hover:text-primary transition-colors"
-                >
-                  Examples
-                </a>
-                <a
-                  href="#features"
-                  className="text-sm hover:text-primary transition-colors"
-                >
-                  Features
-                </a>
-                <a
-                  href="#pricing"
-                  className="text-sm hover:text-primary transition-colors"
-                >
-                  Pricing
-                </a>
-                <a
-                  href="#roadmap"
-                  className="text-sm hover:text-primary transition-colors"
-                >
-                  Roadmap
-                </a>
-                <a
-                  href="#faq"
-                  className="text-sm hover:text-primary transition-colors"
-                >
-                  FAQ
-                </a>
-              </nav>
-            </div>
+      <Header scrollToEditor={scrollToEditor} />
+      <HeroSection scrollToEditor={scrollToEditor} />
+      <ThemeCustomizer
+        theme={theme}
+        isLoading={isLoading}
+        loadDefaultTheme={loadDefaultTheme}
+        handleSaveTheme={handleSaveTheme}
+        updateThemeColor={updateThemeColor}
+        colorFormat={colorFormat}
+        setColorFormat={setColorFormat}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        editorRef={editorRef}
+        generatedCode={generatedCode}
+        copyToClipboard={copyToClipboard}
+        setTheme={setTheme}
+      />
 
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Github className="h-4 w-4" />
-                <span>7.2k</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setDarkMode(!darkMode)}
-              >
-                {darkMode ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </Button>
-              <Button
-                className="bg-primary hover:bg-primary/90"
-                onClick={scrollToEditor}
-              >
-                Try It Now
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left Section - Hero Content */}
-          <div className="space-y-8">
-            <div className="space-y-6">
-              <Badge variant="secondary" className="w-fit">
-                <Sparkles className="h-3 w-3 mr-1" />
-                Visual Theme Editor
-              </Badge>
-
-              <div className="space-y-4">
-                <h1 className="text-5xl lg:text-6xl font-bold tracking-tight">
-                  Design Your{" "}
-                  <span className="italic font-normal text-muted-foreground">
-                    Perfect
-                  </span>
-                  <br />
-                  <span className="text-primary">shadcn/ui</span> Theme
-                </h1>
-
-                <p className="text-lg text-muted-foreground max-w-md">
-                  Customize colors, typography, and layouts with a real-time
-                  preview. No signup required.
-                </p>
-              </div>
-
-              <div className="flex gap-4">
-                <Button
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90"
-                  onClick={scrollToEditor}
-                >
-                  Start Customizing
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-                <Button size="lg" variant="outline">
-                  View Examples
-                </Button>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm">
-                  <Check className="h-4 w-4 text-green-500" />
-                  <span>Real-time Preview</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Check className="h-4 w-4 text-green-500" />
-                  <span>Export to Tailwind</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Check className="h-4 w-4 text-green-500" />
-                  <span>Beautiful Presets</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Section - Interactive Theme Editor */}
-          <div ref={editorRef} className="lg:sticky lg:top-24">
-            <Card className="w-full max-w-lg mx-auto">
-              {/* Card Header with Traffic Light Controls */}
-              <div className="flex items-center justify-between p-4 border-b">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm">
-                    <RefreshCw className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <CardContent className="p-6 space-y-6">
-                {/* Color Palette Section */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Color Palette</h3>
-                    <Button variant="ghost" size="sm">
-                      <RefreshCw className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  {/* Color Gradient Bar */}
-                  <div className="space-y-3">
-                    <div
-                      className="h-8 rounded-lg"
-                      style={{
-                        background: `linear-gradient(to right, ${theme.colors.primary[500]}, ${theme.colors.secondary[500]}, ${theme.colors.accent[500]}, ${theme.colors.muted[100]}, ${theme.colors.background})`,
-                      }}
-                    />
-
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Primary</span>
-                      <span>Secondary</span>
-                      <span>Accent</span>
-                      <span>Muted</span>
-                      <span>Background</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Preview Section */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Preview</h3>
-                    <Button variant="ghost" size="sm">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm">
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copy Code
-                      </Button>
-                    </div>
-
-                    {/* Color Format Selector */}
-                    <div className="flex gap-1 p-1 bg-muted rounded-lg">
-                      {(["oklch", "hsl", "rgb", "hex"] as const).map(
-                        (format) => (
-                          <Button
-                            key={format}
-                            variant={
-                              colorFormat === format ? "default" : "ghost"
-                            }
-                            size="sm"
-                            onClick={() => setColorFormat(format)}
-                            className="text-xs"
-                          >
-                            {format}
-                          </Button>
-                        )
-                      )}
-                    </div>
-
-                    {/* UI Component Preview */}
-                    <div className="space-y-3">
-                      <div
-                        className="p-4 rounded-lg border"
-                        style={{
-                          backgroundColor: theme.colors.background,
-                          borderColor: theme.colors.border,
-                        }}
-                      >
-                        <div className="flex items-center gap-2 mb-2">
-                          <div
-                            className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold"
-                            style={{
-                              backgroundColor: theme.colors.primary[500],
-                              color: theme.colors.primary.foreground,
-                            }}
-                          >
-                            UI
-                          </div>
-                          <div className="flex-1">
-                            <div
-                              className="h-2 rounded mb-1"
-                              style={{
-                                backgroundColor: theme.colors.foreground,
-                                opacity: 0.8,
-                              }}
-                            />
-                            <div
-                              className="h-2 rounded w-3/4"
-                              style={{
-                                backgroundColor: theme.colors.muted.foreground,
-                                opacity: 0.6,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Theme Controls */}
-                <div className="space-y-4">
-                  <Tabs
-                    value={activeTab}
-                    onValueChange={setActiveTab}
-                    className="w-full"
-                  >
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="colors">Colors</TabsTrigger>
-                      <TabsTrigger value="design">Design</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="colors" className="space-y-4 mt-4">
-                      <div className="space-y-3">
-                        <ColorPicker
-                          label="Primary"
-                          value={theme.colors.primary[500]}
-                          onChange={(value) =>
-                            updateThemeColor("primary.500", value)
-                          }
-                          showAdvanced={false}
-                        />
-                        <ColorPicker
-                          label="Secondary"
-                          value={theme.colors.secondary[500]}
-                          onChange={(value) =>
-                            updateThemeColor("secondary.500", value)
-                          }
-                          showAdvanced={false}
-                        />
-                        <ColorPicker
-                          label="Accent"
-                          value={theme.colors.accent[500]}
-                          onChange={(value) =>
-                            updateThemeColor("accent.500", value)
-                          }
-                          showAdvanced={false}
-                        />
-                        <ColorPicker
-                          label="Background"
-                          value={theme.colors.background}
-                          onChange={(value) =>
-                            updateThemeColor("background", value)
-                          }
-                          showAdvanced={false}
-                        />
-                        <ColorPicker
-                          label="Foreground"
-                          value={theme.colors.foreground}
-                          onChange={(value) =>
-                            updateThemeColor("foreground", value)
-                          }
-                          showAdvanced={false}
-                        />
-                        <ColorPicker
-                          label="Border"
-                          value={theme.colors.border}
-                          onChange={(value) =>
-                            updateThemeColor("border", value)
-                          }
-                          showAdvanced={false}
-                        />
-                      </div>
-                    </TabsContent>
-
-                    <TabsContent value="design" className="space-y-4 mt-4">
-                      <TypographyEditor
-                        theme={theme}
-                        onUpdate={(updates) =>
-                          setTheme((prev) =>
-                            prev ? { ...prev, ...updates } : prev
-                          )
-                        }
-                      />
-                      <SpacingEditor
-                        theme={theme}
-                        onUpdate={(updates) =>
-                          setTheme((prev) =>
-                            prev ? { ...prev, ...updates } : prev
-                          )
-                        }
-                      />
-                      <ThemePresets
-                        onApplyPreset={(preset) => setTheme(preset)}
-                      />
-                    </TabsContent>
-                  </Tabs>
-                </div>
-
-                {/* Export Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Export</h3>
-                  {theme.id ? (
-                    <ExportOptions themeId={theme.id} themeName={theme.name} />
-                  ) : (
-                    <div className="text-center py-4">
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Save your theme to export
-                      </p>
-                      <Button
-                        onClick={handleSaveTheme}
-                        size="sm"
-                        className="w-full"
-                      >
-                        <Save className="h-4 w-4 mr-2" />
-                        Save Theme
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </div>
-
-      <div id="examples">
+      <div id="examples" className="py-12">
         <ExamplesPage />
       </div>
-      <div id="features">
+      <div id="features" className="py-12">
         <FeaturesPage />
       </div>
-      <div id="pricing">
+      <div id="pricing" className="py-12">
         <PricingPage />
       </div>
-      <div id="roadmap">
+      <div id="roadmap" className="py-12">
         <RoadmapPage />
       </div>
       <div id="faq" className="py-12">
