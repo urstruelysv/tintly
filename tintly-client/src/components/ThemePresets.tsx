@@ -143,9 +143,11 @@ const themePresets: Theme[] = [
       background: '#ffffff',
       foreground: '#0f172a',
       border: '#fed7aa',
+      input: '#fed7aa',
       ring: '#ea580c',
-      destructive: '#ef4444',
-      'destructive-foreground': '#ffffff',
+      card: { DEFAULT: '#ffffff', foreground: '#0f172a' },
+      popover: { DEFAULT: '#ffffff', foreground: '#0f172a' },
+      destructive: { DEFAULT: '#ef4444', foreground: '#ffffff' },
     },
     typography: {
       fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },

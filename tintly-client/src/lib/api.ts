@@ -12,9 +12,11 @@ export interface Theme {
     background: string;
     foreground: string;
     border: string;
+    input: string;
     ring: string;
-    destructive: string;
-    'destructive-foreground': string;
+    card: { DEFAULT: string; foreground: string };
+    popover: { DEFAULT: string; foreground: string };
+    destructive: { DEFAULT: string; foreground: string };
   };
   typography: {
     fontFamily: { sans: string[] };
@@ -46,12 +48,18 @@ export const themeApi = {
   async getAll(): Promise<Theme[]> {
     const response = await fetch(`${API_BASE_URL}/api/themes`);
     const result: ApiResponse<Theme[]> = await response.json();
+    if (!result.success || !result.data) {
+      throw new Error(result.message || "API returned no data or an error.");
+    }
     return result.data;
   },
 
   async getById(id: string): Promise<Theme> {
     const response = await fetch(`${API_BASE_URL}/api/themes/${id}`);
     const result: ApiResponse<Theme> = await response.json();
+    if (!result.success || !result.data) {
+      throw new Error(result.message || "API returned no data or an error.");
+    }
     return result.data;
   },
 
@@ -62,6 +70,9 @@ export const themeApi = {
       body: JSON.stringify(theme),
     });
     const result: ApiResponse<Theme> = await response.json();
+    if (!result.success || !result.data) {
+      throw new Error(result.message || "API returned no data or an error.");
+    }
     return result.data;
   },
 
@@ -72,6 +83,9 @@ export const themeApi = {
       body: JSON.stringify(theme),
     });
     const result: ApiResponse<Theme> = await response.json();
+    if (!result.success || !result.data) {
+      throw new Error(result.message || "API returned no data or an error.");
+    }
     return result.data;
   },
 
@@ -82,8 +96,11 @@ export const themeApi = {
   },
 
   async getDefaultTemplate(): Promise<Theme> {
-    const response = await fetch(`${API_BASE_URL}/api/themes/default/template`);
+    const response = await fetch(`${API_BASE_URL}/api/themes/default/template`, { cache: 'no-store' });
     const result: ApiResponse<Theme> = await response.json();
+    if (!result.success || !result.data) {
+      throw new Error(result.message || "API returned no data or an error.");
+    }
     return result.data;
   },
 };
@@ -96,7 +113,14 @@ export const exportApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ themeId, format }),
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API Error: ${response.status} - ${errorText}`);
+    }
     const result: ApiResponse<ExportResponse> = await response.json();
+    if (!result.success || !result.data) {
+      throw new Error(result.message || "API returned no data or an error.");
+    }
     return result.data;
   },
 
@@ -106,7 +130,14 @@ export const exportApi = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ themeId }),
     });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API Error: ${response.status} - ${errorText}`);
+    }
     const result: ApiResponse<ExportResponse> = await response.json();
+    if (!result.success || !result.data) {
+      throw new Error(result.message || "API returned no data or an error.");
+    }
     return result.data;
   },
 };

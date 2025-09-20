@@ -45,7 +45,12 @@ export function ThemePreview({ theme }: ThemePreviewProps) {
     "--background": theme.colors.background,
     "--foreground": theme.colors.foreground,
     "--border": theme.colors.border,
+    "--input": theme.colors.input,
     "--ring": theme.colors.ring,
+    "--card": theme.colors.card.DEFAULT,
+    "--card-foreground": theme.colors.card.foreground,
+    "--popover": theme.colors.popover.DEFAULT,
+    "--popover-foreground": theme.colors.popover.foreground,
     "--muted": theme.colors.muted[100],
     "--muted-foreground": theme.colors.muted.foreground,
   } as React.CSSProperties;

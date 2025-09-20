@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,6 +47,12 @@ import {
   Wrench,
 } from "lucide-react";
 
+import ExamplesPage from "@/components/ExamplesPage";
+import FeaturesPage from "@/components/FeaturesPage";
+import PricingPage from "@/components/PricingPage";
+import RoadmapPage from "@/components/RoadmapPage";
+import FaqPage from "@/components/FaqPage";
+
 export default function TweakcnClone() {
   const [theme, setTheme] = useState<Theme | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,10 +68,42 @@ export default function TweakcnClone() {
     "oklch" | "hsl" | "rgb" | "hex"
   >("oklch");
 
+  const editorRef = useRef<HTMLDivElement>(null);
+
   // Load default theme on mount
   useEffect(() => {
     loadDefaultTheme();
   }, []);
+
+  useEffect(() => {
+    if (theme) {
+      document.documentElement.style.setProperty('--background', theme.colors.background);
+      document.documentElement.style.setProperty('--foreground', theme.colors.foreground);
+      document.documentElement.style.setProperty('--primary', theme.colors.primary[500]);
+      document.documentElement.style.setProperty('--primary-foreground', theme.colors.primary.foreground);
+      document.documentElement.style.setProperty('--secondary', theme.colors.secondary[500]);
+      document.documentElement.style.setProperty('--secondary-foreground', theme.colors.secondary.foreground);
+      document.documentElement.style.setProperty('--accent', theme.colors.accent[500]);
+      document.documentElement.style.setProperty('--accent-foreground', theme.colors.accent.foreground);
+      document.documentElement.style.setProperty('--muted', theme.colors.muted[100]);
+      document.documentElement.style.setProperty('--muted-foreground', theme.colors.muted.foreground);
+      document.documentElement.style.setProperty('--border', theme.colors.border);
+      document.documentElement.style.setProperty('--input', theme.colors.input);
+      document.documentElement.style.setProperty('--ring', theme.colors.ring);
+      if (theme.colors.card) {
+        document.documentElement.style.setProperty('--card', theme.colors.card.DEFAULT);
+        document.documentElement.style.setProperty('--card-foreground', theme.colors.card.foreground);
+      }
+      if (theme.colors.popover) {
+        document.documentElement.style.setProperty('--popover', theme.colors.popover.DEFAULT);
+        document.documentElement.style.setProperty('--popover-foreground', theme.colors.popover.foreground);
+      }
+      if (theme.colors.destructive) {
+        document.documentElement.style.setProperty('--destructive', theme.colors.destructive.DEFAULT);
+        document.documentElement.style.setProperty('--destructive-foreground', theme.colors.destructive.foreground);
+      }
+    }
+  }, [theme]);
 
   const loadDefaultTheme = async () => {
     try {
@@ -139,24 +177,36 @@ export default function TweakcnClone() {
     try {
       // Generate Tailwind config
       const tailwindResponse = await exportApi.exportTailwind(theme.id);
-      setGeneratedCode((prev) => ({
-        ...prev,
-        tailwind: tailwindResponse.content,
-      }));
+      if (tailwindResponse && tailwindResponse.content) {
+        setGeneratedCode((prev) => ({
+          ...prev,
+          tailwind: tailwindResponse.content,
+        }));
+      } else {
+        console.error("Failed to generate Tailwind config: No content received.", tailwindResponse);
+      }
 
       // Generate CSS variables
       const cssResponse = await exportApi.exportTheme(theme.id, "css");
-      setGeneratedCode((prev) => ({
-        ...prev,
-        css: cssResponse.content,
-      }));
+      if (cssResponse && cssResponse.content) {
+        setGeneratedCode((prev) => ({
+          ...prev,
+          css: cssResponse.content,
+        }));
+      } else {
+        console.error("Failed to generate CSS variables: No content received.", cssResponse);
+      }
 
       // Generate JSON tokens
       const jsonResponse = await exportApi.exportTheme(theme.id, "json");
-      setGeneratedCode((prev) => ({
-        ...prev,
-        json: jsonResponse.content,
-      }));
+      if (jsonResponse && jsonResponse.content) {
+        setGeneratedCode((prev) => ({
+          ...prev,
+          json: jsonResponse.content,
+        }));
+      } else {
+        console.error("Failed to generate JSON tokens: No content received.", jsonResponse);
+      }
     } catch (error) {
       console.error("Failed to generate code:", error);
     }
@@ -191,6 +241,10 @@ export default function TweakcnClone() {
     );
   }
 
+  const scrollToEditor = () => {
+    editorRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
       {/* Header */}
@@ -202,35 +256,35 @@ export default function TweakcnClone() {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Wrench className="h-4 w-4 text-primary-foreground" />
                 </div>
-                <span className="text-xl font-bold">tweakcn</span>
+                <span className="text-xl font-bold">tintly</span>
               </div>
               <nav className="hidden md:flex gap-6 ml-8">
                 <a
-                  href="#"
+                  href="#examples"
                   className="text-sm hover:text-primary transition-colors"
                 >
                   Examples
                 </a>
                 <a
-                  href="#"
+                  href="#features"
                   className="text-sm hover:text-primary transition-colors"
                 >
                   Features
                 </a>
                 <a
-                  href="#"
+                  href="#pricing"
                   className="text-sm hover:text-primary transition-colors"
                 >
                   Pricing
                 </a>
                 <a
-                  href="#"
+                  href="#roadmap"
                   className="text-sm hover:text-primary transition-colors"
                 >
                   Roadmap
                 </a>
                 <a
-                  href="#"
+                  href="#faq"
                   className="text-sm hover:text-primary transition-colors"
                 >
                   FAQ
@@ -254,7 +308,10 @@ export default function TweakcnClone() {
                   <Moon className="h-4 w-4" />
                 )}
               </Button>
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button
+                className="bg-primary hover:bg-primary/90"
+                onClick={scrollToEditor}
+              >
                 Try It Now
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -275,7 +332,7 @@ export default function TweakcnClone() {
               </Badge>
 
               <div className="space-y-4">
-                <h1 className="text-4xl lg:text-5xl font-bold tracking-tight">
+                <h1 className="text-5xl lg:text-6xl font-bold tracking-tight">
                   Design Your{" "}
                   <span className="italic font-normal text-muted-foreground">
                     Perfect
@@ -291,7 +348,11 @@ export default function TweakcnClone() {
               </div>
 
               <div className="flex gap-4">
-                <Button size="lg" className="bg-primary hover:bg-primary/90">
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90"
+                  onClick={scrollToEditor}
+                >
                   Start Customizing
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
@@ -318,7 +379,7 @@ export default function TweakcnClone() {
           </div>
 
           {/* Right Section - Interactive Theme Editor */}
-          <div className="lg:sticky lg:top-24">
+          <div ref={editorRef} className="lg:sticky lg:top-24">
             <Card className="w-full max-w-lg mx-auto">
               {/* Card Header with Traffic Light Controls */}
               <div className="flex items-center justify-between p-4 border-b">
@@ -554,6 +615,22 @@ export default function TweakcnClone() {
             </Card>
           </div>
         </div>
+      </div>
+
+      <div id="examples">
+        <ExamplesPage />
+      </div>
+      <div id="features">
+        <FeaturesPage />
+      </div>
+      <div id="pricing">
+        <PricingPage />
+      </div>
+      <div id="roadmap">
+        <RoadmapPage />
+      </div>
+      <div id="faq" className="py-12">
+        <FaqPage />
       </div>
 
       {/* Footer */}
