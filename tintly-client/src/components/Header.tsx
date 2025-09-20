@@ -6,10 +6,11 @@ import { useState } from "react";
 
 interface HeaderProps {
   scrollToEditor: () => void;
+  darkMode: boolean;
+  setDarkMode: (darkMode: boolean) => void;
 }
 
-export function Header({ scrollToEditor }: HeaderProps) {
-  const [darkMode, setDarkMode] = useState(false);
+export function Header({ scrollToEditor, darkMode, setDarkMode }: HeaderProps) {
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">

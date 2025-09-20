@@ -131,7 +131,9 @@ export function ThemeCustomizer({
               <div
                 className="h-8 rounded-lg"
                 style={{
-                  background: theme?.colors ? `linear-gradient(to right, ${theme.colors.primary[500]}, ${theme.colors.secondary[500]}, ${theme.colors.accent[500]}, ${theme.colors.muted[100]}, ${theme.colors.background})` : ''
+                  background: theme?.colors
+                    ? `linear-gradient(to right, ${theme.colors.primary[500]}, ${theme.colors.secondary[500]}, ${theme.colors.accent[500]}, ${theme.colors.muted[100]}, ${theme.colors.background})`
+                    : "",
                 }}
               />
 
@@ -153,70 +155,9 @@ export function ThemeCustomizer({
                 <Eye className="h-4 w-4" />
               </Button>
             </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm">
-                  <Copy className="h-4 w-4 mr-2" />
-                  Copy Code
-                </Button>
-              </div>
-
-              {/* Color Format Selector */}
-              <div className="flex gap-1 p-1 bg-muted rounded-lg">
-                {(["oklch", "hsl", "rgb", "hex"] as const).map((format) => (
-                  <Button
-                    key={format}
-                    variant={colorFormat === format ? "default" : "ghost"}
-                    size="sm"
-                    onClick={() => setColorFormat(format)}
-                    className="text-xs"
-                  >
-                    {format}
-                  </Button>
-                ))}
-              </div>
-
-              {/* UI Component Preview */}
-              <div className="space-y-3">
-                <div
-                  className="p-4 rounded-lg border"
-                  style={{
-                    backgroundColor: theme?.colors?.background,
-                    borderColor: theme?.colors?.border,
-                  }}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <div
-                      className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold"
-                      style={{
-                        backgroundColor: theme?.colors?.primary[500],
-                        color: theme?.colors?.primary.foreground,
-                      }}
-                    >
-                      UI
-                    </div>
-                    <div className="flex-1">
-                      <div
-                        className="h-2 rounded mb-1"
-                        style={{
-                          backgroundColor: theme?.colors?.foreground,
-                          opacity: 0.8,
-                        }}
-                      />
-                      <div
-                        className="h-2 rounded w-3/4"
-                        style={{
-                          backgroundColor: theme?.colors?.muted.foreground,
-                          opacity: 0.6,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
+
+          <ThemePreview theme={theme} />
 
           {/* Theme Controls */}
           <div className="space-y-4">
@@ -234,15 +175,13 @@ export function ThemeCustomizer({
                 <div className="space-y-3">
                   <ColorPicker
                     label="Primary"
-                    value={theme?.colors?.primary[500] || ''}
-                    onChange={(value) =>
-                      updateThemeColor("primary.500", value)
-                    }
+                    value={theme?.colors?.primary[500] || ""}
+                    onChange={(value) => updateThemeColor("primary.500", value)}
                     showAdvanced={false}
                   />
                   <ColorPicker
                     label="Secondary"
-                    value={theme?.colors?.secondary[500] || ''}
+                    value={theme?.colors?.secondary[500] || ""}
                     onChange={(value) =>
                       updateThemeColor("secondary.500", value)
                     }
@@ -250,31 +189,25 @@ export function ThemeCustomizer({
                   />
                   <ColorPicker
                     label="Accent"
-                    value={theme?.colors?.accent[500] || ''}
-                    onChange={(value) =>
-                      updateThemeColor("accent.500", value)
-                    }
+                    value={theme?.colors?.accent[500] || ""}
+                    onChange={(value) => updateThemeColor("accent.500", value)}
                     showAdvanced={false}
                   />
                   <ColorPicker
                     label="Background"
-                    value={theme?.colors?.background || ''}
-                    onChange={(value) =>
-                      updateThemeColor("background", value)
-                    }
+                    value={theme?.colors?.background || ""}
+                    onChange={(value) => updateThemeColor("background", value)}
                     showAdvanced={false}
                   />
                   <ColorPicker
                     label="Foreground"
-                    value={theme?.colors?.foreground || ''}
-                    onChange={(value) =>
-                      updateThemeColor("foreground", value)
-                    }
+                    value={theme?.colors?.foreground || ""}
+                    onChange={(value) => updateThemeColor("foreground", value)}
                     showAdvanced={false}
                   />
                   <ColorPicker
                     label="Border"
-                    value={theme?.colors?.border || ''}
+                    value={theme?.colors?.border || ""}
                     onChange={(value) => updateThemeColor("border", value)}
                     showAdvanced={false}
                   />
@@ -285,22 +218,16 @@ export function ThemeCustomizer({
                 <TypographyEditor
                   theme={theme}
                   onUpdate={(updates) =>
-                    setTheme((prev) =>
-                      prev ? { ...prev, ...updates } : prev
-                    )
+                    setTheme((prev) => (prev ? { ...prev, ...updates } : prev))
                   }
                 />
                 <SpacingEditor
                   theme={theme}
                   onUpdate={(updates) =>
-                    setTheme((prev) =>
-                      prev ? { ...prev, ...updates } : prev
-                    )
+                    setTheme((prev) => (prev ? { ...prev, ...updates } : prev))
                   }
                 />
-                <ThemePresets
-                  onApplyPreset={(preset) => setTheme(preset)}
-                />
+                <ThemePresets onApplyPreset={(preset) => setTheme(preset)} />
               </TabsContent>
             </Tabs>
           </div>

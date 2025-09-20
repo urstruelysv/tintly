@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { themeApi, exportApi, Theme } from "@/lib/api";
 
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
+import { ThemeBuilder } from "@/components/ThemeBuilder";
 import { ThemeCustomizer } from "@/components/ThemeCustomizer";
-import { HeroSection } from "@/components/HeroSection";
+
 import { ThemeEditor } from "@/components/ThemeEditor";
 import ExamplesPage from "@/components/ExamplesPage";
 import FeaturesPage from "@/components/FeaturesPage";
@@ -41,96 +41,27 @@ export default function TweakcnClone() {
   }, []);
 
   useEffect(() => {
-    if (theme) {
-      document.documentElement.style.setProperty(
-        "--background",
-        theme.colors.background
-      );
-      document.documentElement.style.setProperty(
-        "--foreground",
-        theme.colors.foreground
-      );
-      document.documentElement.style.setProperty(
-        "--primary",
-        theme.colors.primary[500]
-      );
-      document.documentElement.style.setProperty(
-        "--primary-foreground",
-        theme.colors.primary.foreground
-      );
-      document.documentElement.style.setProperty(
-        "--secondary",
-        theme.colors.secondary[500]
-      );
-      document.documentElement.style.setProperty(
-        "--secondary-foreground",
-        theme.colors.secondary.foreground
-      );
-      document.documentElement.style.setProperty(
-        "--accent",
-        theme.colors.accent[500]
-      );
-      document.documentElement.style.setProperty(
-        "--accent-foreground",
-        theme.colors.accent.foreground
-      );
-      document.documentElement.style.setProperty(
-        "--muted",
-        theme.colors.muted[100]
-      );
-      document.documentElement.style.setProperty(
-        "--muted-foreground",
-        theme.colors.muted.foreground
-      );
-      document.documentElement.style.setProperty(
-        "--border",
-        theme.colors.border
-      );
-      document.documentElement.style.setProperty("--input", theme.colors.input);
-      document.documentElement.style.setProperty("--ring", theme.colors.ring);
-      if (theme.colors.card) {
-        document.documentElement.style.setProperty(
-          "--card",
-          theme.colors.card.DEFAULT
-        );
-        document.documentElement.style.setProperty(
-          "--card-foreground",
-          theme.colors.card.foreground
-        );
-      }
-      if (theme.colors.popover) {
-        document.documentElement.style.setProperty(
-          "--popover",
-          theme.colors.popover.DEFAULT
-        );
-        document.documentElement.style.setProperty(
-          "--popover-foreground",
-          theme.colors.popover.foreground
-        );
-      }
-      if (theme.colors.destructive) {
-        document.documentElement.style.setProperty(
-          "--destructive",
-          theme.colors.destructive.DEFAULT
-        );
-        document.documentElement.style.setProperty(
-          "--destructive-foreground",
-          theme.colors.destructive.foreground
-        );
-      }
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
-  }, [theme]);
+  }, [darkMode]);
 
   const loadDefaultTheme = async () => {
     try {
-      const defaultTheme = await themeApi.getDefaultTemplate();
-      setTheme({
-        ...defaultTheme,
-        name: "My Theme",
-        description: "A beautiful theme created with Tintly",
-      });
+      let defaultTheme = await themeApi.getDefaultTemplate();
+      if (!defaultTheme.id) {
+        // If the default theme doesn't have an ID, save it to get one
+        defaultTheme = await themeApi.create({
+          ...defaultTheme,
+          name: "My Theme",
+          description: "A beautiful theme created with Tintly",
+        });
+      }
+      setTheme(defaultTheme);
     } catch (error) {
-      console.error("Failed to load default theme:", error);
+      console.error("Failed to load or save default theme:", error);
     } finally {
       setIsLoading(false);
     }
@@ -250,9 +181,8 @@ export default function TweakcnClone() {
 
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
-      <Header scrollToEditor={scrollToEditor} />
-      <HeroSection scrollToEditor={scrollToEditor} />
-      <ThemeCustomizer
+      <Header scrollToEditor={scrollToEditor} darkMode={darkMode} setDarkMode={setDarkMode} />
+      <ThemeBuilder
         theme={theme}
         isLoading={isLoading}
         loadDefaultTheme={loadDefaultTheme}
@@ -265,6 +195,7 @@ export default function TweakcnClone() {
         editorRef={editorRef}
         generatedCode={generatedCode}
         copyToClipboard={copyToClipboard}
+        scrollToEditor={scrollToEditor}
         setTheme={setTheme}
       />
 
